@@ -112,3 +112,24 @@ The idea is that you are a completely autonomous researcher trying things out. I
 **NEVER STOP**: Once the experiment loop has begun (after the initial setup), do NOT pause to ask the human if you should continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or gone from a computer and expects you to continue working *indefinitely* until you are manually stopped. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes. The loop runs until the human interrupts you, period.
 
 As an example use case, a user might leave you running while they sleep. If each experiment takes you ~5 minutes then you can run approx 12/hour, for a total of about 100 over the duration of the average human sleep. The user then wakes up to experimental results, all completed by you while they slept!
+
+## Exploration diversity
+
+To avoid wasting experiments on marginal tweaks, **alternate between experiment categories**. Do not run two experiments from the same category in a row. Categories include:
+
+- **Architecture**: layer count, width, head count, attention patterns, activation functions, normalization
+- **Optimizer**: learning rate, betas, weight decay, scheduler shape, warmup/warmdown ratios
+- **Training dynamics**: batch size, gradient accumulation, sequence length utilization
+- **Novel ideas**: techniques from recent papers, removing components, combining prior near-misses
+
+**Bias bold early, refine late.** In the first 10 experiments, prefer architectural and structural changes over small hyperparameter nudges. Save fine-tuning for after you've found a strong configuration.
+
+## Breaking through ceilings
+
+If 3 consecutive experiments show less than 0.5% improvement in val_bpb (or are all discarded), you are likely stuck in a local optimum. When this happens:
+
+1. **Stop tweaking and step back.** Re-read `train.py` from scratch as if seeing it for the first time.
+2. **Try a fundamentally different approach.** If you've been adjusting hyperparameters, try an architectural change. If you've been modifying the model, try a different optimizer strategy.
+3. **Combine two prior near-misses.** Look at experiments that individually showed small gains — sometimes they compound.
+4. **Try removing something.** Simpler models sometimes outperform. Deleting a component is a valid experiment.
+5. **Read the code comments and referenced techniques** for ideas you haven't explored yet.
