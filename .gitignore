@@ -16,5 +16,10 @@ queue/
 CLAUDE.md
 AGENTS.md
 
+# Runtime outputs
+results.json
+run.log
+checkpoint_pre_eval.pt
+
 # Experimental code/artifacts
 dev/

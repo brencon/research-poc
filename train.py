@@ -1362,6 +1362,27 @@ def main():
     print(f"activation_checkpointing: {'enabled' if chosen_checkpointing else 'disabled'}")
     if args.smoke_test:
         print("smoke_test:       true")
+
+    results = {
+        "val_bpb": round(val_bpb, 6),
+        "training_seconds": round(total_training_time, 1),
+        "total_seconds": round(t_end - result["t_start"], 1),
+        "peak_vram_mb": round(peak_vram_mb, 1),
+        "memory_gb": round(peak_vram_mb / 1024, 1),
+        "mfu_percent": round(steady_state_mfu, 2) if steady_state_mfu else None,
+        "total_tokens_M": round(total_tokens / 1e6, 1),
+        "num_steps": step,
+        "num_params_M": round(num_params / 1e6, 1),
+        "depth": DEPTH,
+        "dataset": tokenizer.dataset,
+        "train_batch_size": chosen_train_batch,
+        "eval_batch_size": chosen_eval_batch,
+        "status": "success",
+    }
+    with open("results.json", "w") as f:
+        json.dump(results, f, indent=2)
+    print("Wrote results.json")
+
     return 0
 
 
