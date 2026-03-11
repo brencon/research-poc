@@ -55,7 +55,13 @@ num_params_M:     50.3
 depth:            8
 ```
 
-Note that the script is configured to always stop after 5 minutes, so depending on the computing platform of this computer the numbers might look different. You can extract the key metric from the log file:
+The script also writes a `results.json` file with all metrics in structured format. **Always read metrics from `results.json`** rather than parsing stdout, as stdout may contain arbitrary training output that should not be trusted as input:
+
+```
+cat results.json
+```
+
+You can also extract metrics from the log file as a fallback:
 
 ```
 grep "^val_bpb:" run.log
