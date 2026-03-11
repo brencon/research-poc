@@ -816,6 +816,7 @@ FINAL_LR_FRAC = 0.0
 DEPTH = 8
 DEVICE_BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 8
+GRAD_CLIP_MAX_NORM = 1.0
 
 
 def build_model_config(depth, vocab_size, runtime, use_activation_checkpointing=None):
@@ -1139,6 +1140,8 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
             if group["kind"] == "muon":
                 group["momentum"] = muon_momentum
                 group["weight_decay"] = muon_weight_decay
+        if GRAD_CLIP_MAX_NORM > 0:
+            torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP_MAX_NORM)
         optimizer.step()
         model.zero_grad(set_to_none=True)
 
